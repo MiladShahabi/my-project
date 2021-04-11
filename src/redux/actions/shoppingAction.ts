@@ -7,7 +7,7 @@ import { FoodAvailability } from '../models'
 //availability Action
 
 export interface AvailabilityAction{
-    readonly type: 'ON_AVAILABILITY'
+    readonly type: 'ON_AVAILABILITY',
     payload: FoodAvailability
 }
 

@@ -35,43 +35,45 @@ export const _LandingScreen: React.FC<LandingProps> = (props) => {
 
     useEffect(()=> {
 
-     (async () =>{
+        (async () =>{
 
-        let { status } = await Location.requestPermissionsAsync();
+            let { status } = await Location.requestPermissionsAsync();
         
-        if (status !== 'granted'){
-            setErrorMsg('Permission to access loactaion is not granted')
-        }
-
-        let location: any= await Location.getCurrentPositionAsync({})
-        const { coords } = location
-
-        if(coords){
-
-            const { latitude, longitude } = coords;
-            
-            let addressResponse: any = await Location.reverseGeocodeAsync({ latitude, longitude})
-
-            for(let item of addressResponse){
-                setAddress(item)
-                onUpdateLocation(address)
-                let currentAddress = `${item.name}, ${item.street}, ${item.postalCode}, ${item.country}`
-                setDisplayAddress(currentAddress)
-
-                if (currentAddress.length > 0){
-                    setTimeout(() =>{
-                        navigate('homeStack')
-                    }, 3000)
-                }
-                return;
-
+            if (status !== 'granted'){
+                setErrorMsg('Permission to access loactaion is not granted')
             }
 
+            let location: any= await Location.getCurrentPositionAsync({})
+            const { coords } = location
 
-         }else{
+            if(coords){
+
+                const { latitude, longitude } = coords;
+            
+                let addressResponse: any = await Location.reverseGeocodeAsync({ latitude, longitude})
+
+                for(let item of addressResponse){
+                    setAddress(item)
+                    onUpdateLocation(address)
+                    let currentAddress = `${item.name}, ${item.street}, ${item.postalCode}, ${item.country}`
+                    setDisplayAddress(currentAddress)
+
+                    if (currentAddress.length > 0){
+                        setTimeout(() =>{
+                            navigate('homeStack')
+                        }, 1000)
+                    }
+
+                    return;
+
+                }
+
+
+            }else{
             //notify user something went wrong with location
-        }
-     })();    
+            }
+        
+        })();    
 
     },[])
 
