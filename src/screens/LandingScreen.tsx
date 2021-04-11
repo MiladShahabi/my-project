@@ -54,7 +54,7 @@ export const _LandingScreen: React.FC<LandingProps> = (props) => {
 
                 for(let item of addressResponse){
                     setAddress(item)
-                    onUpdateLocation(address)
+                    onUpdateLocation(item)
                     let currentAddress = `${item.name}, ${item.street}, ${item.postalCode}, ${item.country}`
                     setDisplayAddress(currentAddress)
 
