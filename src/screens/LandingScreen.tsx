@@ -43,7 +43,7 @@ export const _LandingScreen: React.FC<LandingProps> = (props) => {
                 setErrorMsg('Permission to access loactaion is not granted')
             }
 
-            let location: any= await Location.getCurrentPositionAsync({})
+            let location: any= await Location.getCurrentPositionAsync({});
             const { coords } = location
 
             if(coords){

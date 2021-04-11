@@ -44,7 +44,7 @@ export interface UserModel{
     firstName: string;
     lastName: string;
     contactNumber: string;
-    token: string;
+    token: string
 }
 
 export interface UserState{
