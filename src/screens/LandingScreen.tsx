@@ -61,7 +61,7 @@ export const _LandingScreen: React.FC<LandingProps> = (props) => {
                 if (currentAddress.length > 0){
                     setTimeout(() =>{
                         navigate('homeStack')
-                    }, 1000)
+                    }, 3000)
                 }
                 return;
 
