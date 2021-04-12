@@ -29,7 +29,7 @@ export interface Restaurant{
     foodType: string;
     address: string;
     phone: string;
-    image: string;
+    images: string;
     foods: [FoodModel];
 }
 
