@@ -5,7 +5,7 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '../utils'
 
 import { connect } from 'react-redux'
-import { ButtonWithIcon, SearchBar } from '../components'
+import { ButtonWithIcon, CategoryCard, SearchBar } from '../components'
 import { onAvailability, UserState, ApplicationState, ShoppingState } from '../redux'
 
 interface HomeProps{
@@ -47,7 +47,14 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
             </View>
 
             <View style={styles.body}>
-                
+                <ScrollView>
+                    <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={categories}
+                    renderItem ={({ item }) => <CategoryCard item={item} onTap={() => {alert('Category tapped') }} />}
+                    />
+                </ScrollView>
             </View>
         </View>
     )
