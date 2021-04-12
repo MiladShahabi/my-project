@@ -53,6 +53,7 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
                     showsHorizontalScrollIndicator={false}
                     data={categories}
                     renderItem ={({ item }) => <CategoryCard item={item} onTap={() => {alert('Category tapped') }} />}
+                    keyExtractor={(item) => `${item.id}`}
                     />
                 </ScrollView>
             </View>
