@@ -5,7 +5,7 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '../utils'
 
 import { connect } from 'react-redux'
-import { SearchBar } from '../components'
+import { ButtonWithIcon, SearchBar } from '../components'
 import { onAvailability, UserState, ApplicationState, ShoppingState } from '../redux'
 
 interface HomeProps{
@@ -38,11 +38,11 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
                     <Text>{`${location.name},${location.street},${location.city}`}</Text> 
                     <Text> Edit</Text> 
                 </View>
-                <View style={{ flex: 8, backgroundColor: 'green'}}>
+                <View style={{ display: 'flex', height: 60, justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', marginLeft: 4}}>
                     <SearchBar didTouch={() => {
                         navigate('SearchPage')
                     }} onTextChange={() => {}} />
-
+                    <ButtonWithIcon onTap={() => {}} icon={require('../images/hambar.png')} width={50} height={40} />
                 </View>
             </View>
 
@@ -57,22 +57,16 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: 'green'
+        backgroundColor: '#FFF'
     },
     navigation: {
         flex: 2,
-        backgroundColor: 'red'
     },
     body: {
-        flex: 9,
+        flex: 10,
         justifyContent: 'center',
         alignItems:'center',
-        backgroundColor: 'yellow'
     },
-    footer: {
-        flex: 1,
-        backgroundColor: 'cyan'
-    }
 
 })
 
