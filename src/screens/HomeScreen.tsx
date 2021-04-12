@@ -34,19 +34,16 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.navigation}> 
-                {/* <View style={{ marginTop: 50, flex: 4, backgroundColor: 'white', paddingLeft: 20,paddingRight: 20, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+                <View style={{ marginTop: 50, flex: 4, backgroundColor: 'white', paddingLeft: 20,paddingRight: 20, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
                     <Text>{`${location.name},${location.street},${location.city}`}</Text> 
                     <Text> Edit</Text> 
-                </View> */}
-
-                    <Text>Navigation {JSON.stringify(location)} </Text>
-
-                {/* <View style={{ flex: 8, backgroundColor: 'green'}}>
+                </View>
+                <View style={{ flex: 8, backgroundColor: 'green'}}>
                     <SearchBar didTouch={() => {
                         navigate('SearchPage')
                     }} onTextChange={() => {}} />
 
-                </View> */}
+                </View>
             </View>
 
             <View style={styles.body}>
