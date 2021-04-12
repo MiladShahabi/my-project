@@ -65,6 +65,17 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
                     renderItem ={({ item }) => <RestaurantCard item={item} onTap={() => {alert('Category tapped') }} />}
                     keyExtractor={(item) => `${item._id}`}
                     />
+
+                    <View>
+                        <Text style={{fontSize: 25, fontWeight: '600', color: '#f15b5d', marginLeft: 20 }}> 30 Minutes Foods </Text>
+                    </View>
+                    <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={foods}
+                    renderItem ={({ item }) => <RestaurantCard item={item} onTap={() => {alert('Category tapped') }} />}
+                    keyExtractor={(item) => `${item._id}`}
+                    />
                     
                 </ScrollView>
 

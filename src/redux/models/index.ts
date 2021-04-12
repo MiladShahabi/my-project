@@ -18,7 +18,7 @@ export interface FoodModel{
     category: string;
     price: number;
     readyTime: number;
-    image: [string]
+    images: [string]
 }
 
 //Restaurant Model

@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, Dimensions } from 'react-native'
-import { Restaurant } from '../redux'
+import { FoodModel, Restaurant } from '../redux'
 
 
 const screenWidth = Dimensions.get('screen').width;
 
 interface RestaurantProps{
-    item: Restaurant
+    item: Restaurant | FoodModel
     onTap: Function;
  }
 
