@@ -12,9 +12,9 @@ interface ButtonProps{
 const ButtonWithIcon: React.FC<ButtonProps> = ({ onTap, icon, width, height }) => {
 
 return (
-    <TouchableOpacity style={[styles.btn, { width, height } ]}>
+    <TouchableOpacity style={[styles.btn, { width, height } ]}
         onPress={() => onTap()}
-
+    >
         <Image style={{ width: (width - 2), height: (height - 2)}} source={icon}/>
 
     </TouchableOpacity>
@@ -23,7 +23,7 @@ return (
 
 
 const styles = StyleSheet.create({
-btn: { display: 'flex',  justifyContent: 'center', alignItems: 'center', with : 60, height: 40},
+btn: { display: 'flex',  justifyContent: 'center', alignItems: 'center', width : 60, height: 40},
 })
 
  export { ButtonWithIcon }
