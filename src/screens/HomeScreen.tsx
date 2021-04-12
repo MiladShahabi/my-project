@@ -6,7 +6,7 @@ import { useNavigation } from '../utils'
 
 import { connect } from 'react-redux'
 import { ButtonWithIcon, CategoryCard, SearchBar, RestaurantCard } from '../components'
-import { onAvailability, UserState, ApplicationState, ShoppingState } from '../redux'
+import { onAvailability, UserState, ApplicationState, ShoppingState, Restaurant, FoodModel } from '../redux'
 
 interface HomeProps{
     userReducer: UserState,
@@ -29,7 +29,13 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
         props.onAvailability(location.postalCode)
     },[])
 
+    const onTapRestaurant = (item: Restaurant ) =>{
+        navigate('RestaurantPage', { restaurant: item})
+    }
 
+    const onTapFood = (item: FoodModel ) =>{
+        navigate('FoodDetilPage', { food: item})
+    }
 
     return (
         <View style={styles.container}>
@@ -62,7 +68,7 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={restaurants}
-                    renderItem ={({ item }) => <RestaurantCard item={item} onTap={() => {alert('Category tapped') }} />}
+                    renderItem ={({ item }) => <RestaurantCard item={item} onTap={onTapRestaurant} />}
                     keyExtractor={(item) => `${item._id}`}
                     />
 
@@ -73,7 +79,7 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={foods}
-                    renderItem ={({ item }) => <RestaurantCard item={item} onTap={() => {alert('Category tapped') }} />}
+                    renderItem ={({ item }) => <RestaurantCard item={item} onTap={onTapFood} />}
                     keyExtractor={(item) => `${item._id}`}
                     />
                     
