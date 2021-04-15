@@ -56,5 +56,6 @@ export interface UserState{
 
 export interface ShoppingState{
     availability: FoodAvailability,
+    availableFoods: [FoodModel]
     //other models
 }

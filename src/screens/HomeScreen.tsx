@@ -6,12 +6,13 @@ import { useNavigation } from '../utils'
 
 import { connect } from 'react-redux'
 import { ButtonWithIcon, CategoryCard, SearchBar, RestaurantCard } from '../components'
-import { onAvailability, UserState, ApplicationState, ShoppingState, Restaurant, FoodModel } from '../redux'
+import { onAvailability, onSearchFoods ,UserState, ApplicationState, ShoppingState, Restaurant, FoodModel } from '../redux'
 
 interface HomeProps{
     userReducer: UserState,
     shoppingReducer: ShoppingState,
-    onAvailability: Function
+    onAvailability: Function,
+    onSearchFoods: Function
 }
 
 export const _HomeScreen: React.FC<HomeProps> = (props) => {
@@ -23,10 +24,14 @@ export const _HomeScreen: React.FC<HomeProps> = (props) => {
 
     const { categories, foods, restaurants } = availability
 
-    console.log(foods)
+    //onsole.log(foods)
 
     useEffect(() => {
         props.onAvailability(location.postalCode)
+        setTimeout(() => {
+            props.onSearchFoods(location.postalCode)
+        },1000)
+
     },[])
 
     const onTapRestaurant = (item: Restaurant ) =>{
@@ -114,6 +119,6 @@ const mapToStateProps =(state: ApplicationState) =>({
     shoppingReducer: state.shoppingReducer
 })
 
-const HomeScreen = connect(mapToStateProps, { onAvailability })(_HomeScreen)
+const HomeScreen = connect(mapToStateProps, { onAvailability, onSearchFoods})(_HomeScreen)
 
 export { HomeScreen }

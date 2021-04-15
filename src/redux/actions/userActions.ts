@@ -11,7 +11,7 @@ export interface UpdateLocationAction{
 }
 
 
-export interface UserErrorAction{
+export interface UserErrorAction{    
     readonly type: 'ON_USER_ERROR',
     payload: any 
 }

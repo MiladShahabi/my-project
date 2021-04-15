@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
-import { ButtonWithIcon } from '../components';
-import { Restaurant } from '../redux';
+import { ButtonWithIcon, FoodCard } from '../components';
+import { Restaurant, FoodModel } from '../redux';
+
+import { useNavigation } from '../utils/useNavigation'
 
 interface RestaurantProps{
     navigation: { getParam: Function, goBack: Function}
@@ -14,7 +16,12 @@ const RestaurantScreen: React.FC<RestaurantProps> = (props) => {
 
     const restaurant =getParam('restaurant') as Restaurant
 
-    console.log(restaurant);
+   // console.log(restaurant);
+    const { navigate } = useNavigation()
+
+    const onTapFood = (item: FoodModel ) =>{
+      navigate('FoodDetailPage', { food: item})
+}
 
 return (<View style={styles.container}>
         <View style={styles.navigation}>
@@ -35,7 +42,7 @@ return (<View style={styles.container}>
         <FlatList
             showsVerticalScrollIndicator={false}
             data={restaurant.foods}
-            renderItem={({ item }) => <View />}
+            renderItem={({ item }) => <FoodCard item={item} onTap={onTapFood}/>}
             keyExtractor={(item) => `${item._id}`}
         />
         
