@@ -18,7 +18,8 @@ export interface FoodModel{
     category: string;
     price: number;
     readyTime: number;
-    images: [string]
+    images: [string];
+    unit: number;
 }
 
 //Restaurant Model
@@ -51,7 +52,8 @@ export interface UserModel{
 export interface UserState{
     user: UserModel;
     location: LocationGeocodedAddress;
-    error: string | undefined
+    error: string | undefined;
+    Cart: [FoodModel]
 }
 
 export interface ShoppingState{

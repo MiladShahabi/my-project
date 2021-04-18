@@ -70,7 +70,7 @@ export const onSearchFoods = (postCode: string) => {
 
         try { 
 
-            const response = await axios.get<[FoodModel]>( `${BASE_URL}food/Search/${postCode}` )
+            const response = await axios.get<[FoodModel]>(`${BASE_URL}food/Search/${postCode}` )
             
             console.log(response)
 

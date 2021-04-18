@@ -2,15 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, ImageBackground, Dimensions } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 import { ButtonWithIcon, FoodCard } from '../components';
-import { FoodModel } from '../redux';
+import { connect } from 'react-redux';
+import { ApplicationState, FoodModel, UserState, onUpdateCart } from '../redux';
 
 import { useNavigation } from '../utils/useNavigation'
+import { checkExistence } from '../utils';
 
 interface FoodDetailProps{
+    userReducer: UserState,
+    onUpdateCart: Function,
     navigation: { getParam: Function, goBack: Function}
   }
 
-const FoodDetailScreen: React.FC<FoodDetailProps> = (props) => {
+const _FoodDetailScreen: React.FC<FoodDetailProps> = (props) => {
 
     const { getParam, goBack } =props.navigation;
 
@@ -19,6 +23,7 @@ const FoodDetailScreen: React.FC<FoodDetailProps> = (props) => {
    // console.log(food);
     const { navigate } = useNavigation()
 
+    const { Cart } = props.userReducer;
 
 
 return (<View style={styles.container}>
@@ -37,12 +42,12 @@ return (<View style={styles.container}>
 
         </View>
         </ImageBackground>
-          <View style={{ display: 'flex', height: 300, padding: 30}}> 
+          <View style={{ display: 'flex', height: 220, padding: 30}}> 
           <Text> Food will be ready within {food.readyTime} Minite(s)</Text>
           <Text>{food.description}</Text>
           </View>
           <View style={{ height: 120}}>
-              <FoodCard item={food} onTap={() => {}} />
+              <FoodCard item={checkExistence(food, Cart)} onTap={() => {}} onUpdateCart= {props.onUpdateCart} />
 
           </View>
 
@@ -59,4 +64,13 @@ navigation: { flex: 1, marginTop: 43, paddingLeft: 10, flexDirection: 'row', ali
 body: { flex: 10, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#FFF', paddingBottom: 160 },
 footer: { flex: 1, backgroundColor: 'cyan' }
 })
+
+
+const mapStateToProps = (state: ApplicationState) => ({
+  shoppingReducer: state.shoppingReducer,
+  userReducer: state.userReducer
+})
+
+const FoodDetailScreen = connect(mapStateToProps, {onUpdateCart})(_FoodDetailScreen)
+
  export { FoodDetailScreen }

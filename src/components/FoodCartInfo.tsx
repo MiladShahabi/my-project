@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, Dimensions 
 import { FoodModel } from '../redux'
 import { ButtonAddRemove } from './ButtonAddRemove'
 
-interface FoodCardProps{
+interface FoodCardInfoProps{
     item: FoodModel;
     onTap: Function;
     onUpdateCart: Function;
@@ -11,7 +11,7 @@ interface FoodCardProps{
 
 
 
-const FoodCard : React.FC<FoodCardProps> = ({ item, onTap, onUpdateCart }) => {
+const FoodCardInfo : React.FC<FoodCardInfoProps> = ({ item, onTap, onUpdateCart }) => {
 
     const didUpdatdeCart = (unit: number) => {
 
@@ -23,14 +23,14 @@ const FoodCard : React.FC<FoodCardProps> = ({ item, onTap, onUpdateCart }) => {
 
 return (<View style={styles.container}>
 
-        <Image source={{ uri: `${item.images[0]}`}} style={{ width: 100, height: 100, borderRadius: 20, backgroundColor: '#EAEAEA'}} />
-        <TouchableOpacity onPress={() => onTap(item)}
-        style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
-            <View style={{ display: 'flex', flex: 7, padding: 10}}>
-                <Text>{item.name}</Text>
-                <Text>{item.category}</Text>
+        <View style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View style={{ display: 'flex', flex: 8, padding: 10, marginTop: 10, paddingLeft: 20}}>
+                <Text style={{ fontSize: 18, fontWeight: '500' }}>{item.name}</Text>
+                {/* <Text>{item.description}</Text> */}
+                <Text style={{ fontSize: 13, fontWeight: '600' }}>{item.category}</Text>
+                
             </View>
-            <View style={{ display: 'flex', flex: 5, padding: 10, justifyContent: 'space-around', alignItems: 'center', marginRight: 10}}>
+            <View style={{ display: 'flex', flex: 3, padding: 10, justifyContent: 'space-around', alignItems: 'center', marginRight: 10}}>
                 <Text style={{ fontSize: 18, fontWeight: '600', color: '#7C7C7C'}}>{item.price} ₺</Text>
                 <ButtonAddRemove onAdd={() => {
                     let unit = isNaN(item.unit) ? 0 : item.unit;
@@ -43,7 +43,7 @@ return (<View style={styles.container}>
                 }} 
                 unit={item.unit}/>
             </View>
-        </TouchableOpacity>
+        </View>
 
 </View>)}
 
@@ -67,4 +67,4 @@ navigation: { flex: 2, backgroundColor: 'red'},
 body: { flex: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow'},
 footer: { flex: 1, backgroundColor: 'cyan' }
 })
- export { FoodCard }
+ export { FoodCardInfo }

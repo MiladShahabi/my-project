@@ -1,27 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
 import { connect } from 'react-redux'
-import { ApplicationState, FoodModel, ShoppingState } from '../redux'
+import { ApplicationState, FoodModel, ShoppingState, onUpdateCart, UserState } from '../redux'
 
 import { ButtonWithIcon, FoodCard, SearchBar } from '../components'
 import { FlatList } from 'react-native-gesture-handler'
-import { useNavigation } from '../utils'
+
+
+import { checkExistence, useNavigation } from '../utils'
 
 interface SearchScreenProps{
-    shoppingReducer: ShoppingState
+    userReducer: UserState,
+    shoppingReducer: ShoppingState,
+    onUpdateCart: Function,
 
 
  }
 const _SearchScreen: React.FC<SearchScreenProps> = (props) => {
 
     const { navigate } = useNavigation()
+
+
     const [isEditing, setIsEditing] = useState(false)
     const [keyword,setKeyword] = useState('')
 
     const {availableFoods} =props.shoppingReducer;
 
+    const { Cart } = props.userReducer;
+
+    //console.log(Cart);
+
     const onTapFood = (item: FoodModel ) =>{
-        navigate('FoodDetilPage', { food: item})
+        navigate('FoodDetailPage', { food: item})
     }
 
     //console.log(availableFoods)
@@ -46,11 +56,14 @@ return (<View style={styles.container}>
                         })
                         : availableFoods
                     }
-                    renderItem={({ item }) => <FoodCard onTap={onTapFood} item={item} /> }
+                    renderItem={({ item }) => <FoodCard 
+                    onTap={onTapFood} 
+                    item={checkExistence(item, Cart)} 
+                    onUpdateCart={props.onUpdateCart}/> }
                     keyExtractor={(item) => `${item._id}`}
                 />
-            </View>
 
+            </View>
 </View>)}
 
 const styles = StyleSheet.create({
@@ -61,9 +74,10 @@ footer: { flex: 1, backgroundColor: 'cyan' }
 })
 
 const mapStateToProps = (state: ApplicationState) => ({
-    shoppingReducer: state.shoppingReducer
+    shoppingReducer: state.shoppingReducer,
+    userReducer: state.userReducer
 })
 
-const SearchScreen = connect(mapStateToProps, {})(_SearchScreen)
+const SearchScreen = connect(mapStateToProps, {onUpdateCart})(_SearchScreen)
 
 export { SearchScreen }
