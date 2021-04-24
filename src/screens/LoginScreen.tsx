@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
 import { connect } from 'react-redux'
-import { ApplicationState, onUserLogin, onUserSignup, UserState } from '../redux'
+import { ApplicationState, onUserLogin, onUserSignup, UserState, onOTPRequest, onVerifyOTP } from '../redux'
 
 import { ButtonWithTitle, TextField } from '../components'
+import { useNavigation } from '../utils'
 
 interface LoginProps{
     onUserSignup: Function,
     onUserLogin: Function,
-    userReducer: UserState
+    userReducer: UserState,
+    onOTPRequest: Function,
+    onVerifyOTP: Function
 }
 
 
-const _LoginScreen: React.FC<LoginProps> = ({onUserLogin, onUserSignup, userReducer}) => {
+const _LoginScreen: React.FC<LoginProps> = ({onUserLogin, onUserSignup, userReducer, onOTPRequest, onVerifyOTP}) => {
     
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('')
@@ -20,6 +23,37 @@ const _LoginScreen: React.FC<LoginProps> = ({onUserLogin, onUserSignup, userRedu
     const [title, setTitle] = useState('Login');
     const [isSignup, setIsSignup] = useState(false);
 
+    const [ otp, setOtp ] = useState('')
+    const [verified, setVerified] = useState(true)
+    const [requestOtpTitle, setRequestOtpTitle ] = useState('Request a New OTP in')
+    const [canRequestOtp, setCanRequestOtp] = useState(false)
+
+    let countDown: number;
+
+    const { user } = userReducer;
+
+    const { navigate } = useNavigation()
+
+    useEffect(() => {
+
+        if(user.verified !== undefined){
+            if(user.verified === true){
+                // navigate to cart 
+                navigate('CartPage')
+            }else{
+                setVerified(user.verified);
+                // check for start timer
+                onEnableOtpRequest()
+            }
+        }
+
+
+        return () => {
+            clearInterval(countDown);
+            
+        }
+
+    }, [user]);
 
     const onTapOptions = () => {
         setIsSignup(!isSignup)
@@ -37,24 +71,90 @@ const _LoginScreen: React.FC<LoginProps> = ({onUserLogin, onUserSignup, userRedu
     
     }
 
+    const onEnableOtpRequest = () => {
 
-return (<View style={styles.container}>
-        <View style={styles.navigation}><Text style={{ fontSize: 30 }}>Login</Text></View>
-        <View style={styles.body}>
-            <TextField placeholder="Email" onTextChange={setEmail} />
-            {isSignup &&
-                <TextField placeholder="Phone" onTextChange={setPhone} />
-            }
-            <TextField placeholder="Password" onTextChange={setPassword} isSecure={true} />  
+        const otpDate = new Date();
+        otpDate.setTime(new Date().getTime() + (2 * 60 * 1000));
+        const otpTime = otpDate.getTime()
 
-            <ButtonWithTitle title={title} onTap={onTapAuthenticate} width={340} height={50} />
+        let countDown = setInterval(function(){
 
-            <ButtonWithTitle title={!isSignup ? "No Account? Signup Here" : "Have an Account? Login Here"} onTap={() => onTapOptions()} width={340} height={50} isNoBg={true} />
+            const currentTime = new Date().getTime()
 
-        </View>
+            const totalTime = otpTime - currentTime;
 
-    <View style={styles.footer}></View>
-</View>)}
+            let minutes = Math.floor((totalTime % (1000 * 60 * 60)) / (1000 * 60))
+            let seconds = Math.floor((totalTime % (1000 * 60)) / 1000)
+
+            setRequestOtpTitle(`Request a New OTP in ${minutes}:${seconds}`)
+
+                if(minutes < 1 && seconds < 1){
+                    setRequestOtpTitle(`Request a New OTP`)
+                    setCanRequestOtp(true)
+                    clearInterval(countDown);
+                }
+        },1000);
+
+    }
+
+    const onTapVerify = () => {
+        onVerifyOTP(otp, user)
+
+    }
+
+    const onTapRequestNewOTP = () => {
+        setCanRequestOtp(false)
+        onOTPRequest(user)
+    }
+
+    if(!verified){
+        //show OTP page
+
+        return (<View style={styles.container}>
+                <View style={styles.body}>
+                    <Image source={require('../images/verify_otp.png')} 
+                        style={{ width: 120, height:120, margin: 20}}
+                    />
+                    <Text style={{fontSize: 22, fontWeight: '500', margin: 10}}>Verification</Text>
+                    <Text style={{ fontSize: 16, padding: 10, marginBottom: 20, color: '#716F6F' }}>Enter your OTP sent to your mobile number</Text>
+                    <TextField isOTP={true} placeholder="OTP" onTextChange={setOtp} />
+
+                    <ButtonWithTitle title="Verify OTP" onTap={onTapVerify} width={340} height={50} />
+                    <ButtonWithTitle disable={!canRequestOtp} title={requestOtpTitle} 
+                    isNoBg={true} onTap={onTapRequestNewOTP} width={340} height={50} />
+
+                </View>
+
+            <View style={styles.footer}></View>
+        </View>)
+
+        
+    }else{
+
+
+        return (<View style={styles.container}>
+                <View style={styles.navigation}><Text style={{ fontSize: 30 }}>Login</Text></View>
+                <View style={styles.body}>
+                    <TextField placeholder="Email" onTextChange={setEmail} />
+                    {isSignup &&
+                        <TextField placeholder="Phone" onTextChange={setPhone} />
+                    }
+                    <TextField placeholder="Password" onTextChange={setPassword} isSecure={true} />  
+    
+                    <ButtonWithTitle title={title} onTap={onTapAuthenticate} width={340} height={50} />
+    
+                    <ButtonWithTitle title={!isSignup ? "No Account? Signup Here" : "Have an Account? Login Here"}
+                    onTap={() => onTapOptions()} width={340} height={50} isNoBg={true} />
+    
+                </View>
+    
+            <View style={styles.footer}></View>
+        </View>)
+
+    }
+
+
+}
 
 
 const styles = StyleSheet.create({
@@ -68,6 +168,6 @@ const mapStateToProps = (state: ApplicationState) => ({
     userReducer: state.userReducer
 })
 
-const LoginScreen = connect(mapStateToProps, { onUserLogin, onUserSignup })(_LoginScreen)
+const LoginScreen = connect(mapStateToProps, { onUserLogin, onUserSignup, onOTPRequest, onVerifyOTP})(_LoginScreen)
 
 export { LoginScreen }

@@ -6,18 +6,19 @@ interface ButtonProps{
     width: number;
     height: number;
     title: string;
-    isNoBg?: Boolean;
+    isNoBg?: boolean;
+    disable?: boolean
   }
 
-const ButtonWithTitle: React.FC<ButtonProps> = ({ onTap, title, width, height, isNoBg = false }) => {
+const ButtonWithTitle: React.FC<ButtonProps> = ({ onTap, title, width, height, isNoBg = false, disable = false }) => {
 
     if(isNoBg){
 
         return (
-            <TouchableOpacity style={[styles.btn, { width, height, backgroundColor: 'transparent' } ]}
+            <TouchableOpacity disabled={disable} style={[styles.btn, { width, height, backgroundColor: 'transparent' } ]}
                 onPress={() => onTap()}
             >
-                <Text style={{ fontSize: 18, color: '#3980D9' }}>{title}</Text>
+                <Text style={{ fontSize: 18, color: disable ? '#6F6F6F' : '#3980D9' }}>{title}</Text>
             </TouchableOpacity>
         )
 

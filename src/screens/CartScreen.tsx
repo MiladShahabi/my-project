@@ -19,17 +19,16 @@ interface CartScreenProps{
 const _CartScreen: React.FC<CartScreenProps> = (props) => {
 
     const { navigate } = useNavigation()
-
     const [totalAmount, setTotalAmount] = useState(0)
 
     const [isEditing, setIsEditing] = useState(false)
-    const [keyword,setKeyword] = useState('')
+    const [keyword, setKeyword] = useState('')
 
     const {availableFoods} =props.shoppingReducer;
 
-    const { Cart } = props.userReducer;
+    const { Cart, user } = props.userReducer;
 
-    //console.log(Cart);
+    console.log(user);
 
     const onTapFood = (item: FoodModel ) =>{
         navigate('FoodDetailPage', { food: item})
@@ -44,15 +43,31 @@ const _CartScreen: React.FC<CartScreenProps> = (props) => {
     const onCalculateAmount = () => {
 
         let total = 0;
-        Cart.map(food => {
-            total += food.price * food.unit
-        })
+
+        if(Array.isArray(Cart)){
+
+                Cart.map(food => {
+                total += food.price * food.unit
+            })
+
+        }
 
         setTotalAmount(total)
     }
 
-    const onValidateOrder =() => {
-        navigate('LoginPage')
+    const onValidateOrder = () => {
+        
+        if(!user.verified){
+            //navigate to login page
+            navigate('LoginPage')
+        }else{
+            //place the order
+            console.log('Now we can order ');
+        }
+
+
+
+
     }
 
     if(Cart.length > 0){
