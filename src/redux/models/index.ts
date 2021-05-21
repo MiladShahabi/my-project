@@ -43,6 +43,8 @@ export interface FoodAvailability{
 //todo : Modify later
 //User Model
 export interface UserModel{
+    firstName: string;
+    lastName: string;
     email: string;
     token: string;
     verified: boolean;
@@ -52,11 +54,29 @@ export interface UserState{
     user: UserModel;
     location: LocationGeocodedAddress;
     error: string | undefined;
-    Cart: [FoodModel]
+    Cart: [FoodModel],
+    orders: [OrderModel]
 }
 
 export interface ShoppingState{
     availability: FoodAvailability,
     availableFoods: [FoodModel]
     //other models
+}
+
+export interface CartModel {
+    _id: string;
+    food: FoodModel;
+    unit: number;
+}
+
+export interface OrderModel {
+    _id: string;
+    orderID: string;
+    items: [CartModel];
+    totalAmount: number;
+    orderDate: number;
+    paidThrough: string;
+    paymentResponse: string;
+    orderStatus: string;
 }

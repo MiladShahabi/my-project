@@ -7,11 +7,12 @@ interface FoodCardProps{
     item: FoodModel;
     onTap: Function;
     onUpdateCart: Function;
+    unit?: number | undefined;
 }
 
 
 
-const FoodCard : React.FC<FoodCardProps> = ({ item, onTap, onUpdateCart }) => {
+const FoodCard : React.FC<FoodCardProps> = ({ item, onTap, onUpdateCart, unit }) => {
 
     const didUpdatdeCart = (unit: number) => {
 
@@ -32,16 +33,22 @@ return (<View style={styles.container}>
             </View>
             <View style={{ display: 'flex', flex: 5, padding: 10, justifyContent: 'space-around', alignItems: 'center', marginRight: 10}}>
                 <Text style={{ fontSize: 18, fontWeight: '600', color: '#7C7C7C'}}>{item.price} ₺</Text>
-                <ButtonAddRemove onAdd={() => {
-                    let unit = isNaN(item.unit) ? 0 : item.unit;
-                    didUpdatdeCart(unit + 1);
-                }} 
+                {unit !== undefined ?
+                    <Text style={{ fontSize: 18, fontWeight: '700' }}> Qty: {unit}</Text>
+                    :
+                    <ButtonAddRemove onAdd={() => {
+                     
+                        let unit = isNaN(item.unit) ? 0 : item.unit;
+                        didUpdatdeCart(unit + 1);
+                    }} 
                 
-                onRemove={() => {
-                    let unit = isNaN(item.unit) ? 0 : item.unit;
-                    didUpdatdeCart(unit > 0 ? unit - 1 : unit);
-                }} 
-                unit={item.unit}/>
+                    onRemove={() => {
+                        let unit = isNaN(item.unit) ? 0 : item.unit;
+                        didUpdatdeCart(unit > 0 ? unit - 1 : unit);
+                    }} 
+                    unit={item.unit}/>
+                }
+
             </View>
         </TouchableOpacity>
 

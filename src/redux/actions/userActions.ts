@@ -3,7 +3,7 @@ import { LocationGeocodedAddress } from 'expo-location'
 import { Dispatch } from 'react'
 import { BASE_URL } from '../../utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { FoodModel, UserModel } from '../models'
+import { FoodModel, OrderModel, UserModel } from '../models'
 
 
 export interface UpdateLocationAction{
@@ -27,7 +27,21 @@ export interface UserLoginAction {
     payload: UserModel
 }
 
-export type UserAction = UpdateLocationAction | UserErrorAction | UpdateCartAction | UserLoginAction;
+export interface CreateOrderAction {
+    readonly type : 'ON_CREATE_ORDER',
+    payload: OrderModel
+}
+
+export interface ViewOrdersAction {
+    readonly type : 'ON_VIEW_ORDER' | 'ON_CANCEL_ORDER',
+    payload: [OrderModel]
+}
+
+export interface UserLogoutAction {
+    readonly type : 'ON_USER_LOGOUT'
+}
+
+export type UserAction = UpdateLocationAction | UserErrorAction | UpdateCartAction | UserLoginAction | CreateOrderAction | ViewOrdersAction | UserLogoutAction;
 
 
 // User Actions trigger from Components
@@ -205,6 +219,139 @@ export const onOTPRequest = (user: UserModel) => {
                 type: 'ON_USER_ERROR',
                 payload: error
             })
+        }     
+    }
+}
+
+// transaction ID
+export const onCreateOrder = (cartItems: [FoodModel], user: UserModel) => {
+
+    let cart = new Array();
+
+    cartItems.map(item => {
+        cart.push({_id: item._id, unit: item.unit});
+    })
+
+    // {
+    //     cart: [
+    //         { _id: 'sdfsf', unit: 1 }
+    //     ]
+    // }
+
+    return async ( dispatch: Dispatch<UserAction>) => {
+
+        try{ 
+
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+            const response = await axios.post<OrderModel>(`${BASE_URL}user/create-order`, {
+                cart
+            })
+
+            if(!response){
+                dispatch({
+                    type: 'ON_USER_ERROR',
+                    payload: 'User Verification error'
+                })
+            }else{
+            dispatch({
+                type: 'ON_CREATE_ORDER',
+                payload: response.data
+            })  
+        }  
+
+        } catch (error) {
+            dispatch({
+                type: 'ON_USER_ERROR',
+                payload: error
+            })
+        }     
+    }
+}
+
+
+export const onGetOrders = (user: UserModel) => {
+
+    return async ( dispatch: Dispatch<UserAction>) => {
+
+        try{ 
+
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+            const response = await axios.get<[OrderModel]>(`${BASE_URL}user/order`)
+
+            if(!response){
+                dispatch({
+                    type: 'ON_USER_ERROR',
+                    payload: 'User Verification error'
+                })
+            }else{
+            dispatch({
+                type: 'ON_VIEW_ORDER',
+                payload: response.data
+            })  
+        }  
+
+        } catch (error) {
+            dispatch({
+                type: 'ON_USER_ERROR',
+                payload: error
+            })
+        }     
+    }
+}
+
+
+export const onCancelOrder = (order: OrderModel, user: UserModel) => {
+
+    return async ( dispatch: Dispatch<UserAction>) => {
+
+        try{ 
+
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+            const response = await axios.delete<[OrderModel]>(`${BASE_URL}user/order/${order._id}`)
+
+            if(!response){
+                dispatch({
+                    type: 'ON_USER_ERROR',
+                    payload: 'User Verification error'
+                })
+            }else{
+            dispatch({
+                type: 'ON_CANCEL_ORDER',
+                payload: response.data
+            })  
+        }  
+
+        } catch (error) {
+            dispatch({
+                type: 'ON_USER_ERROR',
+                payload: error
+            })
+        }     
+    }
+}
+
+export const onUserLogout = () => {
+
+    return async ( dispatch: Dispatch<UserAction>) => {
+
+        try{ 
+            
+            console.log('Triggered.. User logout.')
+                dispatch({
+                    type: 'ON_USER_LOGOUT'
+                })    
+
+            } catch (error) {
+                dispatch({
+                    type: 'ON_USER_ERROR',
+                    payload: error
+                })
         }     
     }
 }

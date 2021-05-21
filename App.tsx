@@ -16,6 +16,9 @@ import { RestaurantScreen } from './src/screens/RestaurantScreen';
 import { FoodDetailScreen } from './src/screens/FoodDetailScreen';
 import { CartScreen } from './src/screens/CartScreen';
 import { LoginScreen } from './src/screens/LoginScreen';
+import { OrderScreen } from './src/screens/OrderScreen';
+import { OrderDetailScreen } from './src/screens/OrderDetailScreen';
+import { AccountScreen } from './src/screens/AccountScreen';
 
 const switchNavigator = createSwitchNavigator({
 
@@ -69,8 +72,11 @@ const switchNavigator = createSwitchNavigator({
     Cart: {
       screen: createStackNavigator({
        CartPage: CartScreen,
-       LoginPage: LoginScreen
-      },{
+       LoginPage: LoginScreen,
+       OrderPage: OrderScreen,
+       OrderDetailPage: OrderDetailScreen
+      },
+      {
         defaultNavigationOptions: {
          headerShown: false
         }
@@ -86,8 +92,15 @@ const switchNavigator = createSwitchNavigator({
     // Home tab Icon
     Account: {
       screen: createStackNavigator({
-       AccountPage: HomeScreen,
-       LoginPage: LoginScreen
+        AccountPage: AccountScreen,
+        LoginPage: LoginScreen,
+        AccountOrderPage: OrderScreen,
+        OrderDetailPage: OrderDetailScreen
+      },      
+      {
+        defaultNavigationOptions: {
+         headerShown: false
+        }
       }),
       navigationOptions: {
         tabBarIcon: ({ focused, tintColor }) => {
