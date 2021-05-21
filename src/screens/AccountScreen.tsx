@@ -70,13 +70,13 @@ const _AccountScreen: React.FC<AccountScreenProps> = (props) => {
     </TouchableOpacity>
     }
 
-    if(user !== undefined){
+    if(user.token !== undefined){
 
         return (<View style={styles.container}>
 
                 <View style={styles.navigation}> 
                         <View style={{ display: 'flex', height: 60, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', marginLeft: 4, paddingLeft: 20, paddingRight: 20}}>
-                            <Image source={require('../images/avatar.png')} style={{ width: 150, height: 150, marginRight: 20 }}/>
+                            <Image source={require('../images/avatar.png')} style={{ width: 100, height: 100, marginRight: 10 }}/>
                             <View>
                                 <Text style={{ fontSize: 22, fontWeight: '600'}}>{user.firstName || 'Guest'}</Text>
                                 <Text style={{ fontSize: 18, }}>{user.email}</Text>
@@ -115,7 +115,7 @@ navigation: {
     alignItems: 'center',
 },
 
-body: { flex: 9, display: 'flex' },
+body: { flex: 4, display: 'flex' },
 footer: { flex: 2, padding: 10 },
 
 paymentView: {
