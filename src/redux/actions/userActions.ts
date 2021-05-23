@@ -342,16 +342,16 @@ export const onUserLogout = () => {
 
         try{ 
             
-            console.log('Triggered.. User logout.')
+            console.log('Triggered.. User logout.');
                 dispatch({
                     type: 'ON_USER_LOGOUT'
                 })    
 
-            } catch (error) {
-                dispatch({
-                    type: 'ON_USER_ERROR',
-                    payload: error
-                })
+        } catch (error) {
+            dispatch({
+                type: 'ON_USER_ERROR',
+                payload: error
+            })
         }     
     }
 }

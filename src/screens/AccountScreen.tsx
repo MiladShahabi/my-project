@@ -70,7 +70,7 @@ const _AccountScreen: React.FC<AccountScreenProps> = (props) => {
     </TouchableOpacity>
     }
 
-    if(user.token !== undefined){
+    if(user.verified !== undefined){
 
         return (<View style={styles.container}>
 
