@@ -47,20 +47,22 @@ export interface UserModel{
     lastName: string;
     email: string;
     token: string;
-    verified: boolean;
+    verified: boolean
 }
 
 export interface UserState{
     user: UserModel;
     location: LocationGeocodedAddress;
     error: string | undefined;
-    Cart: [FoodModel],
-    orders: [OrderModel]
+    Cart: [FoodModel];
+    orders: [OrderModel];
+    appliedOffer: OfferModel;
 }
 
 export interface ShoppingState{
     availability: FoodAvailability,
-    availableFoods: [FoodModel]
+    availableFoods: [FoodModel],
+    offers: [OfferModel]
     //other models
 }
 
@@ -79,4 +81,24 @@ export interface OrderModel {
     paidThrough: string;
     paymentResponse: string;
     orderStatus: string;
+}
+
+export interface OfferModel {
+
+    _id: string;
+    offerType: string; // Vendor // Generic
+    vendors: [any];
+    images: [string];
+    title: string;
+    description: string;
+    minValue: number;
+    offerAmount: number;
+    offerPercentage: number;
+    startValidity: Date;
+    endValidity: Date;
+    promoCode: string;
+    promoType: string; // USER // ALL // BANK // CARD
+    bank: [any];
+    bin: [any];
+    pincode: string;
 }

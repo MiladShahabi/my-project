@@ -48,7 +48,7 @@ return (<View style={styles.container}>
             <View style={styles.body}>
                 <FlatList
                     showsVerticalScrollIndicator={false}
-                    data={
+                    data={ Array.isArray(availableFoods) &&
                         isEditing
                         ?
                         availableFoods.filter((item) => {

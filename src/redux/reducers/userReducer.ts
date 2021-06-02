@@ -1,6 +1,6 @@
 import { LocationGeocodedAddress } from 'expo-location'
 import { UserAction } from '../actions'
-import { FoodModel, OrderModel, UserModel, UserState } from '../models'
+import { FoodModel, OfferModel, OrderModel, UserModel, UserState } from '../models'
 
 const initialState: UserState = {
     user: {} as UserModel,
@@ -8,7 +8,7 @@ const initialState: UserState = {
     error: undefined,
     Cart: {} as [FoodModel],
     orders: {} as [OrderModel],
-
+    appliedOffer: {} as OfferModel,
 }
 
 const UserReducer = (state: UserState = initialState, action: UserAction) =>{
@@ -83,7 +83,16 @@ const UserReducer = (state: UserState = initialState, action: UserAction) =>{
                 ...state,
                 orders: action.payload
             }    
-
+        case 'ON_ADD_OFFER':
+            return {
+                ...state,
+                appliedOffer: action.payload
+            } 
+        case 'ON_REMOVE_OFFER':
+            return {
+                ...state,
+                appliedOffer: {}
+            }    
 
         default:
             return state;

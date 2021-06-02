@@ -2,7 +2,7 @@ import axios from 'axios'
 import { LocationGeocodedAddress } from 'expo-location'
 import { Dispatch } from 'react'
 import { BASE_URL } from '../../utils'
-import { FoodAvailability, FoodModel } from '../models'
+import { FoodAvailability, FoodModel, OfferModel } from '../models'
 
 //availability Action
 
@@ -22,7 +22,13 @@ export interface ShoppingErrorAction{
     payload: any
 }
 
-export type ShoppingAction = AvailabilityAction | ShoppingErrorAction | FoodSearchAction
+export interface OfferSearchAction {
+    readonly type: 'ON_OFFER_SEARCH',
+    payload: [OfferModel]
+}
+
+
+export type ShoppingAction = AvailabilityAction | ShoppingErrorAction | FoodSearchAction | OfferSearchAction;
 
 
 
@@ -83,6 +89,40 @@ export const onSearchFoods = (postCode: string) => {
             // save our location in local storage
             dispatch({
                 type: 'ON_FOODS_SEARCH',
+                payload: response.data
+            })  
+        }
+
+        } catch (error) {
+            dispatch({
+                type: 'ON_SHOPPING_ERROR',
+                payload: error
+            })
+        }     
+    }
+}
+
+
+export const onGetOffers = (postCode: string) => {
+
+
+    return async ( dispatch: Dispatch<ShoppingAction>) => {
+
+        try { 
+
+            const response = await axios.get<[OfferModel]>(`${BASE_URL}food/offers/${postCode}` )
+            
+            console.log(response)
+
+            if(!response){
+                dispatch({
+                    type: 'ON_SHOPPING_ERROR',
+                    payload: 'Offer Availability error'
+                })
+            }else{
+            // save our location in local storage
+            dispatch({
+                type: 'ON_OFFER_SEARCH',
                 payload: response.data
             })  
         }

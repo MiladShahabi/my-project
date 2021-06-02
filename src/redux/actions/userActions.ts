@@ -3,7 +3,7 @@ import { LocationGeocodedAddress } from 'expo-location'
 import { Dispatch } from 'react'
 import { BASE_URL } from '../../utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { FoodModel, OrderModel, UserModel } from '../models'
+import { FoodModel, OfferModel, OrderModel, UserModel } from '../models'
 
 
 export interface UpdateLocationAction{
@@ -41,7 +41,20 @@ export interface UserLogoutAction {
     readonly type : 'ON_USER_LOGOUT'
 }
 
-export type UserAction = UpdateLocationAction | UserErrorAction | UpdateCartAction | UserLoginAction | CreateOrderAction | ViewOrdersAction | UserLogoutAction;
+export interface AddRemoveOfferAction {
+    readonly type : 'ON_ADD_OFFER' | 'ON_REMOVE_OFFER',
+    payload: OfferModel
+}
+
+export type UserAction = 
+UpdateLocationAction |
+UserErrorAction | 
+UpdateCartAction | 
+UserLoginAction | 
+CreateOrderAction | 
+ViewOrdersAction | 
+UserLogoutAction |
+AddRemoveOfferAction;
 
 
 // User Actions trigger from Components
@@ -353,5 +366,24 @@ export const onUserLogout = () => {
                 payload: error
             })
         }     
+    }
+}
+
+export const onApplyOffer = (offer: OfferModel, isRemove: boolean) => {
+
+    return async (dispatch: Dispatch<UserAction>) => {
+
+        if(isRemove){
+            dispatch({
+                type: 'ON_REMOVE_OFFER',
+                payload: offer
+            })
+
+        }else{
+            dispatch({
+                type: 'ON_ADD_OFFER',
+                payload: offer
+            })
+        }    
     }
 }
