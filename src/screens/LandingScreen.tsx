@@ -49,6 +49,10 @@ export const _LandingScreen: React.FC<LandingProps> = (props) => {
             if(coords){
 
                 const { latitude, longitude } = coords;
+
+                setTimeout(() =>{
+                    navigate('homeStack')
+                }, 1000)
             
                 let addressResponse: any = await Location.reverseGeocodeAsync({ latitude, longitude})
 

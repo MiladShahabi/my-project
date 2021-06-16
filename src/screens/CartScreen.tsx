@@ -30,7 +30,7 @@ const _CartScreen: React.FC<CartScreenProps> = (props) => {
 
     const {availableFoods} =props.shoppingReducer;
 
-    const { Cart, user, location, orders } = props.userReducer;
+    const { Cart, user, location, orders, appliedOffer } = props.userReducer;
 
     const popupRef = createRef<PaymentTypePopup>();
 
@@ -82,6 +82,34 @@ const _CartScreen: React.FC<CartScreenProps> = (props) => {
         props.onCreateOrder(Cart, user);
         popupRef.current?.close();
     }
+
+    const footerContent = () => {
+
+        return <View style={{ flex: 1, display: 'flex' }}>
+          <TouchableOpacity
+          onPress={() => {
+              navigate('CartOfferPage')
+          }}
+          style={[styles.row, { height: 80}]}
+          >
+              <View style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 18, fontWeight: '600', color: '#525252' }}>Offers & Deals</Text>
+                    {appliedOffer._id !== undefined ?
+                        <View style={{ flex: 1}}>
+                            <Text style={{ fontSize: 14, fontWeight: '500', color: '#3D933F' }}> Applied { appliedOffer.offerPercentage} % of Discount</Text>
+                            
+                        </View>    
+                        :
+                        <View><Text style={{ fontSize: 16, color: '#EE6840'}}> You Can apply available Offers. *TnC Apply.</Text></View>
+                }
+              </View>
+              <Image source={require('../images/arrow_icon.png')} style={{ width: 30, height: 30 }}/>
+
+          </TouchableOpacity>
+        </View>
+
+    }
+
 
     const popupView = () => {
 
@@ -179,6 +207,7 @@ const _CartScreen: React.FC<CartScreenProps> = (props) => {
                         item={checkExistence(item, Cart)} 
                         onUpdateCart={props.onUpdateCart}/> }
                         keyExtractor={(item) => `${item._id}`}
+                        ListFooterComponent={footerContent}
                     />
     
                 </View>
@@ -188,7 +217,7 @@ const _CartScreen: React.FC<CartScreenProps> = (props) => {
                         <Text style={{ fontSize: 18 }}> Total</Text>
                         <Text style={{ fontSize: 18 }}> {totalAmount}</Text>
                     </View>
-                    <ButtonWithTitle title={"Order Now"} onTap={onValidateOrder} height={50} width={320}/>
+                    <ButtonWithTitle title={"Make Payment"} onTap={onValidateOrder} height={50} width={320}/>
                 </View>
 
                 {popupView()}
@@ -230,13 +259,13 @@ const styles = StyleSheet.create({
 
 container: { flex: 1, backgroundColor: '#F2F2F2'},
 navigation: { flex: 1, marginTop: 43, },
-body: { flex: 9, justifyContent: 'center', alignItems: 'center'},
-footer: { flex: 2, padding: 10 },
+body: { flex: 9.5, justifyContent: 'center', alignItems: 'center'},
+footer: { flex: 1.5, padding: 10 },
 
 paymentView: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 10,
+    padding: 5,
     margin: 5,
     backgroundColor: '#E3BE74'
 },
@@ -277,7 +306,22 @@ optionText: {
     color: '#545252'
 },
 
-amountView: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 },
+row: {
+    display: 'flex',
+    backgroundColor: 'white', 
+    justifyContent: 'space-around', 
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderColor: '#D3D3D3',
+    borderWidth: 1,
+    marginLeft: 10,
+    paddingLeft: 10, 
+    paddingRight: 10
+},
+
+amountView: { 
+    display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20 },
 
 })
 

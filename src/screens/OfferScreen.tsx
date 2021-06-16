@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, Alert } from 'react-native'
 import { connect } from 'react-redux'
-import { ApplicationState, FoodModel, ShoppingState, onUpdateCart, UserState, onGetOffers, OfferModel } from '../redux'
+import { ApplicationState, ShoppingState,
+    UserState, onGetOffers, OfferModel, onApplyOffer } from '../redux'
 
 import { ButtonWithIcon, OfferCard } from '../components'
 import { FlatList } from 'react-native-gesture-handler'
@@ -12,12 +13,14 @@ import { checkExistence, useNavigation } from '../utils'
 interface OfferScreenProps{
     userReducer: UserState,
     shoppingReducer: ShoppingState,
-    onUpdateCart: Function,
     onGetOffers: Function,
+    onApplyOffer: Function
  }
-const _OfferScreen: React.FC<OfferScreenProps> = ({ userReducer, shoppingReducer, onGetOffers }) => {
 
-const { location } =userReducer;
+
+const _OfferScreen: React.FC<OfferScreenProps> = ({ userReducer, shoppingReducer, onGetOffers, onApplyOffer }) => {
+
+const { location, Cart, appliedOffer } =userReducer;
 const { offers } = shoppingReducer;
 
 useEffect(() => {
@@ -28,12 +31,51 @@ useEffect(() => {
 
 const onTapApplyOffer = (item: OfferModel) => {
 
+    let total = 0;
+
+    if(Array.isArray(Cart)){
+
+            Cart.map(food => {
+            total += food.price * food.unit
+        })
+
+    }
+
+    const taxAmount = (total / 100 * 0.9) + 40;
+
+    const orderAmount = taxAmount + total
+
+    //console.log(orderAmount);
+
+    if(orderAmount >= item.minValue){
+        onApplyOffer(item, false)
+        showAlert('Offer Applied', `Offer Applied with discount of ${item.offerPercentage}%`)
+    }else{
+        showAlert('This offer is not applicable!', `This offer is applicable with minimum order amount ${item.minValue} only`)
+    }
 
 }
 
-const onTapRemoveOffer = (item: OfferModel) => {
+const showAlert = (title: string, msg: string) => {
+    Alert.alert(
+        title,
+        msg,
+        [
+            { text: 'OK', onPress: () => {}}
+        ]
+    )
+}
 
-    // Remove Offer
+const onTapRemoveOffer = (item: OfferModel) => {
+    onApplyOffer(item, true)
+}
+
+const checkIfExists = (item: OfferModel) => {
+    if(appliedOffer._id !== undefined) {
+        return item._id.toString() === appliedOffer._id.toString()
+    }
+
+    return false;
 }
 
 
@@ -63,7 +105,7 @@ return (<View style={styles.container}>
                     onTapApply={onTapApplyOffer} 
                     onTapRemove={onTapRemoveOffer}
                     item = {item}
-                    isApplied={false}
+                    isApplied={checkIfExists(item)}
                     /> 
                     }
                     keyExtractor={(item) => `${item._id}`}
@@ -85,6 +127,6 @@ const mapStateToProps = (state: ApplicationState) => ({
     userReducer: state.userReducer
 })
 
-const OfferScreen = connect(mapStateToProps, { onGetOffers })(_OfferScreen)
+const OfferScreen = connect(mapStateToProps, { onGetOffers, onApplyOffer })(_OfferScreen)
 
 export { OfferScreen }

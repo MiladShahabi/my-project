@@ -29,13 +29,13 @@ return (<View style={styles.container}>
 
                 {isApplied ? 
                 <TouchableOpacity 
-                onPress={() => onTapApply(item)}
+                onPress={() => onTapRemove(item)}
                 style={[styles.applyPromo, { backgroundColor: '#FF4673' }]}>
                     <Text style={{ fontSize: 16, fontWeight: '600', color: '#FFF' }}> Remove </Text>
                 </TouchableOpacity>
                 :
                 <TouchableOpacity 
-                onPress={() => onTapRemove(item)}
+                onPress={() => onTapApply(item)}
                 style={styles.applyPromo }>
                     <Text style={{ fontSize: 16, fontWeight: '600', color: '#FFF' }}> Apply </Text>
                     <Text style={{ fontSize: 13, fontWeight: '600', color: '#FFF' }}> { item.promoCode } </Text>
