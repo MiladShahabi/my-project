@@ -24,7 +24,7 @@ const { location, Cart, appliedOffer } =userReducer;
 const { offers } = shoppingReducer;
 
 useEffect(() => {
-    onGetOffers(location.postalCode)
+    onGetOffers(location.postalCode);
 },[])
 
 //if(Array.isArray(offers)) { alert(offers.length) }
@@ -43,7 +43,7 @@ const onTapApplyOffer = (item: OfferModel) => {
 
     const taxAmount = (total / 100 * 0.9) + 40;
 
-    const orderAmount = taxAmount + total
+    const orderAmount = (taxAmount + total)
 
     //console.log(orderAmount);
 
@@ -117,7 +117,7 @@ return (<View style={styles.container}>
 
 const styles = StyleSheet.create({
 container: { flex: 1, backgroundColor: '#F2F2F2'},
-navigation: { flex: 1, marginTop: 43, },
+navigation: { flex: 1, marginTop: 43 },
 body: { flex: 10, justifyContent: 'center', alignItems: 'center'},
 footer: { flex: 1, backgroundColor: 'cyan' }
 })
